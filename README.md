@@ -131,10 +131,16 @@ Go nuts.
 
 # Prior art
 
-* [<h3>Andrew Clifton - Don't generate, hash! (Or, how I learned to stop worrying and love SplitMix64)</h3>](https://www.youtube.com/watch?v=e4b--cyXEsM) A talk from the Roguelike Celebration conference that presents the concept of deterministic randomness via hashing in the context of games. As in the title he brings in a traditional RNG alongside the hash function.
+* ### [Andrew Clifton - Don't generate, hash! (Or, how I learned to stop worrying and love SplitMix64)](https://www.youtube.com/watch?v=e4b--cyXEsM)
+  
+  A talk from the Roguelike Celebration conference that presents the concept of deterministic randomness via hashing in the context of games. As described in the title he brings in a traditional RNG alongside the hash function.
 
-* [<h3>froggy_rand</h3>](https://crates.io/crates/froggy-rand) A rust crate implementing the scheme given in the above presentation. Provides it's own algorithms for things like random values in a range instead of integrating with the more robust `rand` implementations. As above, the SplitMix64 generator is employed.
+* ### [froggy_rand](https://crates.io/crates/froggy-rand)
+  
+  A rust crate implementing the scheme given in the above presentation. Provides it's own algorithms for things like random values in a range instead of integrating with the more robust `rand` implementations. As above, the SplitMix64 generator is employed.
 
-* [<h3>rand_seeder</h3>](https://github.com/rust-random/seeder) This crate implements the `rand` API, coming as it does straight from the `rand` project itself. It's built on the SipHash-2.4 hash function and a custom SipRNG algorithm based on the SipHash mixer. The hasher is converted into a SipRNG and that is used to actually generate the random output. It boasts the ability to conserve the entire 256 bits of state from the hasher and pass that into the RNG.  
+* ### [rand_seeder](https://github.com/rust-random/seeder)
+  
+  This crate implements the `rand` API, coming as it does straight from the `rand` project itself. It's built on the SipHash-2.4 hash function and a custom SipRNG algorithm based on the SipHash mixer. The hasher is converted into a SipRNG and that is used to actually generate the random output. It boasts the ability to conserve the entire 256 bits of state from the hasher and pass that into the RNG.  
   
   PureRNG cannot do this - when we finish the hasher we get out only a 64 bit integer, and that is used to advance the state. Information is being thrown away. rand_seeder is able to do this because it has its own custom cryptographic primitives under the hood. PureRNG leans on the `Hasher` trait and that doesn't give us access to the hasher's internal state. As mentioned, this entropy loss doesn't appear to affect PureRNG's statistical quality - plenty of non-cryptographic RNGs get by OK with only 64 bits of state after all.
